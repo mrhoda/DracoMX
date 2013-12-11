@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		    <meta charset="utf-8" />
+            <!--<meta http-equiv="expires" content="0">-->
+		    <meta name="viewport" content="width=180, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		    <meta name="apple-mobile-web-app-capable" content="yes">
+		    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="description" content="" />
+		<meta name="author" content="malcolm" />
+
+		<title>DracoMX</title>
+		
+	  <link rel="stylesheet" href="/scripts/jquery.mobile-1.3.2.min.css">
+
+      <!--   <link href="RIB/src/css/jquery.mobile.structure-1.1.0.css" rel="stylesheet">
+        <link href="RIB/src/css/jquery.mobile.theme-1.1.0.css" rel="stylesheet">-->
+
+  	  <script>
+  	      //localStorage["SessionID"] = "";
+
+  	      $(document).bind("mobileinit", function () {
+  	  				//alert("mobileinit");
+				    // Make your jQuery Mobile framework configuration changes here!
+					$.support.cors = true;
+				    $.mobile.allowCrossDomainPages = true;
+	                    });
+  	      
+  	      //$.mobile.navigate('#home');
+  	    
+  	      function processFormFields(formid,msgname,instanceid,startpoint)
+  	      {
+  	          //alert('process form fields - ' + formid + ' ' + msgname + ' ' + instanceid);
+  	          localStorage['formid'] = formid;
+  	          localStorage['StartPoint'] = startpoint;
+  	          //alert('input = ' + $('#myname').val());
+  	          OpenMsg(msgname, instanceid, '{"_startpoint" : ' + startpoint + '}');
+
+  	      }
+  	      function SetSessionVariables()
+  	      {
+  	          //alert('set session vars');
+  	          if (localStorage['manuallogin'] == 'true')
+  	          {
+  	              //alert('manual login is true');
+  	              return;
+  	          }
+  	          //alert('get hidden fields 1');
+  	          //alert('get user name = ' + getElementValue('hfUserName'));
+  	          //alert('get hidden fields 2');
+  	          if (getElementValue('hfUserName') != '' && getElementValue('hfUserName') != null && getElementValue('hfUserName') != undefined)
+  	          {
+  	              localStorage['MsgPartName'] = getElementValue('hfMsgPartName');
+  	              localStorage['MsgName'] = getElementValue('hfMsgName');
+  	              localStorage['username'] = getElementValue('hfUserName');
+  	              localStorage['StartPoint'] = getElementValue('hfMsgPartIndex');
+  	              localStorage['SessionID'] = getElementValue('hfSessionID');
+  	              //alert('preview session id = ' + localStorage['SessionID']);
+  	          }
+  	      }
+  	      function BodyOnLoad()
+  	      {
+             
+  	          SetSessionVariables();
+
+  	          if (localStorage["SessionID"] == '' || localStorage["SessionID"] == null)
+  	          {
+  	              $('#dmxFooter').hide();
+  	              $.mobile.navigate('#login');
+  	          }
+  	       
+  	      }
+  	      function GetChannelInbox()
+  	      {
+  	          SetSessionVariables();
+
+  	          var dracomx = new DracoMXClient(localStorage['SessionID']);
+
+  	          dracomx.createMessage('sysInboxList', '{"username" : "' + localStorage['username'] + '","channelid" : ' + localStorage['channelid'] + '}', function (jsonresult) {
+  	              //jsonresult.result --> OK
+  	              //jsonresult.msgname
+  	              //jsonresult.msgpart
+  	              //jsonresult.instanceid
+  	              //jsonresult.content
+  	              /////alert('createmsg result=' + jsonresult.instanceid);
+  	              $("#dmxBody").html(jsonresult.content);
+  	              $("#dmxBody").trigger("create");
+
+  	          });
+  	      }
+  	      function OpenInboxMsgApp(MsgName, MsgInstanceGUID)
+  	      {
+  	          var params = '{"channelid" : ' + localStorage['channelid'] + '}';
+  	          OpenMsg(MsgName, MsgInstanceGUID, params);
+  	      }
+  	      function MsgAppSubject(MsgName)
+  	      {
+  	          
+  	          localStorage['MsgName'] = MsgName;
+  	          $.mobile.navigate('#dmxSubject');
+  	      }
+  	      function StartMsgApp()
+  	      {
+  	          var MsgSubject = $('#subjecttext').val();
+  	          //alert('subject=' + MsgSubject + ',msgname=' + localStorage['MsgName']);
+  	          $.mobile.navigate('#home');
+  	          CreateMsg(localStorage['MsgName'], MsgSubject);
+  	      }
+  	      function login()
+  	      {
+  	          var dracomx = new DracoMXClient('');
+  	          //alert('login');
+  	          var username = $('#username').val();
+  	          var password = $('#password').val();
+
+  	          localStorage['username'] = username;
+  	          dracomx.userLogin(username, password, function (jsonresult) {
+  	              //jsonresult.result --> OK
+  	              //jsonresult.sessionid
+  	              //jsonresult.userguid
+  	              //jsonresult.username
+  	              //jsonresult.ID
+  	              //jsonresult.plancode
+  	              //alert('login result=' + JSON.stringify(jsonresult));
+  	              if (jsonresult.result != "OK")
+  	              {
+  	                  
+  	                  $('#dmxPopup').text(jsonresult.result);
+  	                  $('#popupError').popup('open');
+  	                  return;
+  	              }
+  	              
+  	              localStorage['manuallogin'] = 'true';
+  	              localStorage['username'] = username;
+  	              localStorage['SessionID'] = jsonresult.sessionid;
+  	              $.mobile.navigate('#home');
+
+  	          });
+  	      }
+  	      function getElementValue(name)
+  	      {
+  	          //alert('getelementvalue');
+  	          try
+  	          {
+  	              var val = parent.top.document.getElementById(name).value;
+  	          }
+  	          catch (err)
+  	          {
+  	              val = '';
+  	          }
+  	          //alert('val = ' + val);
+  	          return val;
+  	          //alert('fld' + fld.src);
+  	      }
+  	      function ChannelList()
+  	      {
+  	          SetSessionVariables();
+
+  	          var dracomx = new DracoMXClient(localStorage['SessionID']);
+
+  	         
+
+  	          dracomx.createMessage('sysChannelList', '{"username" : "' + localStorage['username'] + '"}', function (jsonresult) {
+  	              //jsonresult.result --> OK
+  	              //jsonresult.msgname
+  	              //jsonresult.msgpart
+  	              //jsonresult.instanceid
+  	              //jsonresult.content
+  	              /////alert('createmsg result=' + jsonresult.instanceid);
+  	              $("#dmxBody").html(jsonresult.content);
+  	              $("#dmxBody").trigger("create");
+
+  	          });
+  	      }
+  	      function MessageAppList(channelid,channelname)
+  	      {
+  	          if (channelid > 0)
+  	          {
+  	              localStorage['channelid'] = channelid;
+  	              localStorage['channelname'] = channelname;
+  	          }
+  	          //$('#tabId1').removeClass('ui-btn-hover-b').addClass('ui-btn-up-b');
+  	          $('#dmxChannels').removeClass('ui-btn-active');
+  	          $('#dmxMsgApps').addClass('ui-btn-active');
+
+  	          SetSessionVariables();
+
+  	          var dracomx = new DracoMXClient(localStorage['SessionID']);
+  	          dracomx.createMessage('sysMessageAppList', '{"channelid" : "' + localStorage['channelid'] + '"}', function (jsonresult) {
+  	              //jsonresult.result --> OK
+  	              //jsonresult.msgname
+  	              //jsonresult.msgpart
+  	              //jsonresult.instanceid
+  	              //jsonresult.content
+  	              /////alert('createmsg result=' + jsonresult.instanceid);
+  	              $("#dmxBody").html(jsonresult.content);
+  	              $("#dmxBody").trigger("create");
+
+  	              $("#dmxHeader").html(localStorage['channelid'] + "." + localStorage['channelname'] );
+  	              $("#dmxHeader").trigger("create");
+  	              //alert('set header');
+  	          });
+  	      }
+  	      function PreviewMsgPart()
+  	      {
+  	            localStorage['manuallogin'] = 'false';
+
+  	            SetSessionVariables();
+  	            Params = '';
+  	            //alert ('session id = ' + localStorage['SessionID']);
+
+  	            var dracomx = new DracoMXClient(localStorage['SessionID']);
+  	            dracomx.createMessage(localStorage['MsgName'], Params, function (jsonresult) {
+  	              //jsonresult.result --> OK
+  	              //jsonresult.msgname
+  	              //jsonresult.msgpart
+  	              //jsonresult.instanceid
+  	              //jsonresult.content
+  	              /////alert('createmsg result=' + jsonresult.instanceid);
+  	                OpenMsg(localStorage['MsgName'], jsonresult.instanceid, '{"_startpoint" : ' + localStorage['StartPoint'] + '}');
+
+  	          });
+  	      }
+  	      function CreateMsg(MsgName, MsgSubject) {
+  	          //alert('xxxx');
+  	          SetSessionVariables();
+  	          Params = '{"_msgsubject" : "' + MsgSubject + '"}';
+  	     
+  	          var dracomx = new DracoMXClient(localStorage['SessionID']);
+  	          dracomx.createMessage(MsgName, Params, function (jsonresult) {
+  	              //jsonresult.result --> OK
+  	              //jsonresult.msgname
+  	              //jsonresult.msgpart
+  	              //jsonresult.instanceid
+  	              //jsonresult.content
+  	              /////alert('createmsg result=' + jsonresult.instanceid);
+  	              $("#dmxBody").html(jsonresult.content);
+  	              $("#dmxBody").trigger("create");
+
+  	          });
+  	      }
+  	      function OpenMsg(MsgName, MsgInstanceID, Params) {
+              
+  	          var dracomx = new DracoMXClient(localStorage["SessionID"]);
+  	          dracomx.openMessage(MsgName, MsgInstanceID, Params, function (jsonresult) {
+  	              //jsonresult.result --> OK
+  	              //jsonresult.msgname
+  	              //jsonresult.msgpart
+  	              //jsonresult.instanceid
+  	              //jsonresult.content
+  	              /////alert('openmsg result=' + JSON.stringify(jsonresult));
+  	              $("#dmxBody").html(jsonresult.content);
+   	              $("#dmxBody").trigger("create");
+  	          });
+  	      }
+	</script>
+	  <!-- jQuery and jQuery Mobile -->
+ 		<script src="/scripts/jquery-1.9.1.min.js"></script>
+	  	<script src="/scripts/jquery.mobile-1.3.2.min.js"></script>
+
+	  	<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js"></script>-->
+
+<!--        <script src="RIB/lib/jquery-1.6.4.js"></script>
+        <script src="RIB/lib/jquery.mobile-1.1.0.js"></script>-->
+       
+	<!-- DracoMX  -->
+        <script src="/scripts/DracoMX-Client-0.1.1.NET.js"></script>
+		<!--<script src="/DesignerUIManager.aspx?op=preview"></script>-->
+		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		 <style type="text/css">
+            #lifooter1 {
+                                 background: orange !important;      
+                            }
+         </style>
+	</head>
+
+	<!--<body onload="previewMsgPart();">-->
+		<body onload="BodyOnLoad();">
+           
+           
+             
+            <div data-role="page" data-control-title="Home" id="home" data-theme="a">	
+			    <div data-role="header" data-position="fixed">
+				    <h6 id="dmxHeader">DracoMX v0.4</h6>
+                    <a onclick="$('#dmxRightPanel').panel('open');" data-icon="bars" data-theme="a" class="ui-btn-right">...</a>
+				    <!--<input id="t1" name="t1" type="text" />-->
+				    <!--<img src="/images/draco6.png" alt="DracoMX" height="42" width="42">-->
+				    <div data-role="navbar" >
+				        <ul>
+				            <li><a href="#" id="dmxChannels" class="ui-btn-active" data-theme="e" onclick="ChannelList();">Channels</a></li>
+				            <li><a href="#" id="dmxMsgApps" data-theme="e"  onclick="MessageAppList(0);">Msg Apps</a></li>
+				            <li><a href="#" id="dmxInbox"  data-theme="e" onclick="GetChannelInbox();">Inbox</a></li>
+				        </ul>
+				    </div><!-- /navbar -->
+			    </div>
+                <div data-role="panel" id="dmxRightPanel" data-position="right" data-display="overlay" data-theme="c">
+                     <ul data-role="listview" data-inset="true" data-divider-theme="a" class="ui-listview">
+				            <li data-theme="c"><a href="#" id="A1"  >Sent</a></li>
+                            <li data-role="list-divider"></li>
+				            <li data-theme="c"><a href="#" id="A2" >Logout</a></li>
+				            <li data-theme="c"><a href="#" id="A3"   onclick="$('#dmxRightPanel').panel('close');$.mobile.navigate('#login');">Login</a></li>
+                            <li data-role="list-divider"><hr /></li>
+                            <li data-theme="c" data-icon="back"><a href="#" data-rel="close"  >Exit</a></li>
+				     </ul>
+                   
+                </div>
+			    <div id="dmxBody"> </div>
+			    <div id="dmxFooter" data-role="footer" data-position="fixed" data-theme="e" >
+                    <div id="dmxFooterNavBar" data-role="navbar">
+				    <ul >
+				        <li ><a   href="#"  class="ui-btn-active" onclick="PreviewMsgPart();">Run Script</a></li>
+                        <li><a href="#"  class="" onclick="$.mobile.navigate('#login');">Login</a></li>
+				    </ul>
+                    </div>
+			    </div>
+            </div>
+             <div data-role="page" data-control-title="Login" id="login" data-theme="a">	
+               
+                <div data-role="popup"  id="popupError" data-transition="pop" data-position-to="window" data-theme="e">
+	                <p id="dmxPopup">This is a completely basic popup, no options set.<p>
+                </div>
+
+                <div data-role="header" data-position="fixed">
+				    <h3>User Login</h3>
+                </div>
+                 
+			    <div data-role="fieldcontain" data-controltype="textinput">
+                    <label for="textinput3">
+                        User
+                    </label>
+                    <input  id="username" placeholder="" value="" type="text">
+                </div>
+        
+                <div data-role="fieldcontain" data-controltype="textinput">
+                     <label for="password">
+                         Password
+                    </label>
+                    <input  id="password" placeholder="" value="" type="password">
+                </div>
+                     <input id="loginsub" type="button" data-inline="true" data-icon="check"  value="Login" onclick="login();">
+                     <input id="logincancel" type="button" data-inline="true" data-icon="delete" value="Cancel" onclick="$.mobile.navigate('#home');">
+			
+            </div>
+
+            <div data-role="page" data-control-title="Subject" id="dmxSubject" data-theme="a">	
+                <div data-role="fieldcontain" data-controltype="textinput">
+                    <label for="textinput3">
+                        Subject
+                    </label>
+                    <input  id="subjecttext" placeholder="" value="" type="text">
+                </div>
+       
+                <input id="subjback" type="button" value="Back" onclick=" $.mobile.navigate('#home');">
+                <input id="subjectcontinue" type="button" value="Continue" onclick="StartMsgApp();">
+                
+            </div>
+	</body>
+</html>
