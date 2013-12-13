@@ -1,7 +1,8 @@
 ﻿function DracoMXClient(SessionID) {
     //var sdomain = "http://41.132.136.166:8099/dracomx";
     //var sdomain = "http://192.168.1.109:8099/dracomx";
-    var sdomain = "http://localhost:8888";
+    //var sdomain = "http://localhost:8888";
+    var sdomain = "http://www.dracomx.co.za";
     var sessid = SessionID;
     this.createMessage = CreateMessage;
     this.openMessage = OpenMessage;
