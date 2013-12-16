@@ -3,7 +3,7 @@
 	<head>
 		    <meta charset="utf-8" />
             <!--<meta http-equiv="expires" content="0">-->
-		    <meta name="viewport" content="width=180, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		    <meta name="viewport" content="width=device-width, initial-scale=1">
 		    <meta name="apple-mobile-web-app-capable" content="yes">
 		    <meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
@@ -21,20 +21,16 @@
 
   	  <script>
   	      //localStorage["SessionID"] = "";
-  	      var SiteUrl = "http://localhost:8888";
 
   	      $(document).bind("mobileinit", function () {
-  	  				alert("mobileinit");
+  	  				//alert("mobileinit");
 				    // Make your jQuery Mobile framework configuration changes here!
-				    $.support.cors = true;
+					$.support.cors = true;
 				    $.mobile.allowCrossDomainPages = true;
 				    $.mobile.defaultPageTransition = 'none';
-      				$.mobile.defaultDialogTransition = 'none';
+      				    $.mobile.defaultDialogTransition = 'none';
   				    $.mobile.page.prototype.options.addBackBtn = true;
-  				    $.mobile.useFastClick = false;
-  				    localStorage['manuallogin'] == 'true';
-  				    localStorage["SessionID"] == '';
-  				    SiteUrl = "www.dracomx.co.za";
+	      			    $.mobile.useFastClick  = false;
 	                    });
   	      
   	      //$.mobile.navigate('#home');
@@ -85,7 +81,7 @@
   	      {
   	          SetSessionVariables();
 
-  	          var dracomx = new DracoMXClient(localStorage['SessionID'],SiteUrl);
+  	          var dracomx = new DracoMXClient(localStorage['SessionID']);
 
   	          dracomx.createMessage('sysInboxList', '{"username" : "' + localStorage['username'] + '","channelid" : ' + localStorage['channelid'] + '}', function (jsonresult) {
   	              //jsonresult.result --> OK
@@ -119,7 +115,7 @@
   	      }
   	      function login()
   	      {
-  	          var dracomx = new DracoMXClient('',SiteUrl);
+  	          var dracomx = new DracoMXClient('');
   	          //alert('login');
   	          var username = $('#username').val();
   	          var password = $('#password').val();
@@ -167,7 +163,7 @@
   	      {
   	          SetSessionVariables();
 
-  	          var dracomx = new DracoMXClient(localStorage['SessionID'],SiteUrl);
+  	          var dracomx = new DracoMXClient(localStorage['SessionID']);
 
   	         
 
@@ -196,7 +192,7 @@
 
   	          SetSessionVariables();
 
-  	          var dracomx = new DracoMXClient(localStorage['SessionID'],SiteUrl);
+  	          var dracomx = new DracoMXClient(localStorage['SessionID']);
   	          dracomx.createMessage('sysMessageAppList', '{"channelid" : "' + localStorage['channelid'] + '"}', function (jsonresult) {
   	              //jsonresult.result --> OK
   	              //jsonresult.msgname
@@ -237,7 +233,7 @@
   	          SetSessionVariables();
   	          Params = '{"_msgsubject" : "' + MsgSubject + '"}';
   	     
-  	          var dracomx = new DracoMXClient(localStorage['SessionID'],SiteUrl);
+  	          var dracomx = new DracoMXClient(localStorage['SessionID']);
   	          dracomx.createMessage(MsgName, Params, function (jsonresult) {
   	              //jsonresult.result --> OK
   	              //jsonresult.msgname
@@ -252,7 +248,7 @@
   	      }
   	      function OpenMsg(MsgName, MsgInstanceID, Params) {
               
-  	          var dracomx = new DracoMXClient(localStorage["SessionID"],SiteUrl);
+  	          var dracomx = new DracoMXClient(localStorage["SessionID"]);
   	          dracomx.openMessage(MsgName, MsgInstanceID, Params, function (jsonresult) {
   	              //jsonresult.result --> OK
   	              //jsonresult.msgname
@@ -288,13 +284,13 @@
 	</head>
 
 	<!--<body onload="previewMsgPart();">-->
-		<body onload="BodyOnLoad();" onunload="alert('unload');">
+		<body onload="BodyOnLoad();">
            
            
              
             <div data-role="page" data-control-title="Home" id="home" data-theme="a">	
 			    <div data-role="header" data-position="fixed">
-				    <h6 id="dmxHeader">DracoMX v0.8</h6>
+				    <h6 id="dmxHeader">DracoMX v0.7</h6>
                     <a onclick="$('#dmxRightPanel').panel('open');" data-icon="bars" data-theme="a" class="ui-btn-right">...</a>
 				    <!--<input id="t1" name="t1" type="text" />-->
 				    <!--<img src="/images/draco6.png" alt="DracoMX" height="42" width="42">-->

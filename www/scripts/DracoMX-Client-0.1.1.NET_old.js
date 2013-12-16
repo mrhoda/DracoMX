@@ -1,14 +1,13 @@
-﻿function DracoMXClient(SessionID,SiteUrl) {
+﻿function DracoMXClient(SessionID) {
     //var sdomain = "http://41.132.136.166:8099/dracomx";
     //var sdomain = "http://192.168.1.109:8099/dracomx";
-    var sdomain = "http://localhost:8888";
+    //var sdomain = "http://localhost:8888";
+    var sdomain = "http://www.dracomx.co.za";
     var sessid = SessionID;
     this.createMessage = CreateMessage;
     this.openMessage = OpenMessage;
     this.userLogin = Login;
      
-    sdomain = SiteUrl;
-
     $.fn.serializeObject = function () {
         var o = {};
         var a = this.serializeArray();
@@ -72,7 +71,6 @@
         }
         //$("#t1").val('=====' + HrefLink); 
         $.support.cors = true;
-        $.mobile.showPageLoadingMsg("e", "Busy...");
         $.ajax
             ({
                 type: "POST",
@@ -95,7 +93,6 @@
 
                 },
                 success: function (result) {
-                    $.mobile.hidePageLoadingMsg();
                     //alert('result11111=' + result);
                     //$("#t1").val('@@@@@Create Message result ' + result);
                     //var MsgStruct = JSON.parse(result);
@@ -108,7 +105,6 @@
                     Done(JSON.parse(result));
                 },
                 error: function (data) {
-                    $.mobile.hidePageLoadingMsg();
                     //alert('data=' + data);
                     //$("#t1").val('@@@@@@error---' + JSON.stringify(data)); 
                     Done(data);
@@ -141,7 +137,6 @@
         }
         //$("#t1").val('=====' + HrefLink); 
         $.support.cors = true;
-        $.mobile.showPageLoadingMsg("e", "Busy...");
         $.ajax
             ({
                 type: "POST",
@@ -164,7 +159,6 @@
 
                 },
                 success: function (result) {
-                    $.mobile.hidePageLoadingMsg();
                     //alert('result11111=' + result);
                     //$("#t1").val('@@@@@Create Message result ' + result);
                     //var MsgStruct = JSON.parse(result);
@@ -177,7 +171,6 @@
                     Done(JSON.parse(result));
                 },
                 error: function (data) {
-                    $.mobile.hidePageLoadingMsg();
                     //alert('data=' + data);
                     //$("#t1").val('@@@@@@error---' + JSON.stringify(data)); 
                     Done(data);
@@ -242,7 +235,6 @@
 
         //$("#t1").val('=====' + HrefLink); 
         $.support.cors = true;
-        $.mobile.showPageLoadingMsg("e", "Busy...");
         $.ajax
             ({
                 type: "POST",
@@ -264,7 +256,6 @@
 
                 },
                 success: function (result) {
-                    $.mobile.hidePageLoadingMsg();
                     //$("#t1").val('@@@@@OPEN success---' ); 
                     //var prevMsgStruct = JSON.parse(localStorage["MsgStruct"]);
 
@@ -290,7 +281,6 @@
 
                 },
                 error: function (data) {
-                    $.mobile.hidePageLoadingMsg();
                     //alert((data));
                     //$("#t1").val('@@@@@@open error---' + JSON.stringify(data)); 
                     //return data;
