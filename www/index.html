@@ -53,7 +53,7 @@
   	          //alert('set session vars');
   	          if (localStorage['manuallogin'] == 'true')
   	          {
-  	              alert('manual login is true');
+  	              //alert('manual login is true');
   	              return;
   	          }
   	          //alert('get hidden fields 1');
@@ -67,11 +67,12 @@
   	              localStorage['StartPoint'] = getElementValue('hfMsgPartIndex');
   	              localStorage['SessionID'] = getElementValue('hfSessionID');
   	              //alert('preview session id = ' + localStorage['SessionID']);
+  	              localStorage['SiteUrl'] = "http://www.dracomx.co.za";
+  	              localStorage["SessionID"] == '';
   	              return;
   	          }
-  	          localStorage['manuallogin'] == 'true';
-  	          localStorage["SessionID"] == '';
-  	          localStorage['SiteUrl'] = "http://www.dracomx.co.za";
+    	          
+  	         
   	      }
   	      function BodyOnLoad()
   	      {
@@ -298,7 +299,7 @@
              
             <div data-role="page" data-control-title="Home" id="home" data-theme="a">	
 			    <div data-role="header" data-position="fixed">
-				    <h6 id="dmxHeader">DracoMX v0.11</h6>
+				    <h6 id="dmxHeader">DracoMX v0.12</h6>
                     <a onclick="$('#dmxRightPanel').panel('open');" data-icon="bars" data-theme="a" class="ui-btn-right">...</a>
 				    <!--<input id="t1" name="t1" type="text" />-->
 				    <!--<img src="/images/draco6.png" alt="DracoMX" height="42" width="42">-->
@@ -316,7 +317,7 @@
                             <li data-role="list-divider"></li>
 				            <li data-theme="c"><a href="#" id="A2" >Logout</a></li>
 				            <li data-theme="c"><a href="#" id="A3"   onclick="$('#dmxRightPanel').panel('close');$.mobile.navigate('#login');">Login</a></li>
-                            <li data-role="list-divider"><hr /></li>
+                            <li data-role="list-divider"></li>
                             <li data-theme="c" data-icon="back"><a href="#" data-rel="close"  >Exit</a></li>
 				     </ul>
                    
