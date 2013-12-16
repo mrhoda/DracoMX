@@ -34,7 +34,7 @@
   				    $.mobile.useFastClick = false;
   				    localStorage['manuallogin'] == 'true';
   				    localStorage["SessionID"] == '';
-  				    SiteUrl = "www.dracomx.co.za";
+  				    SiteUrl = "http://www.dracomx.co.za";
 	                    });
   	      
   	      //$.mobile.navigate('#home');
@@ -67,7 +67,11 @@
   	              localStorage['StartPoint'] = getElementValue('hfMsgPartIndex');
   	              localStorage['SessionID'] = getElementValue('hfSessionID');
   	              //alert('preview session id = ' + localStorage['SessionID']);
+  	              return;
   	          }
+  	          localStorage['manuallogin'] == 'true';
+  	          localStorage["SessionID"] == '';
+  	          SiteUrl = "http://www.dracomx.co.za";
   	      }
   	      function BodyOnLoad()
   	      {
@@ -294,7 +298,7 @@
              
             <div data-role="page" data-control-title="Home" id="home" data-theme="a">	
 			    <div data-role="header" data-position="fixed">
-				    <h6 id="dmxHeader">DracoMX v0.8</h6>
+				    <h6 id="dmxHeader">DracoMX v0.9</h6>
                     <a onclick="$('#dmxRightPanel').panel('open');" data-icon="bars" data-theme="a" class="ui-btn-right">...</a>
 				    <!--<input id="t1" name="t1" type="text" />-->
 				    <!--<img src="/images/draco6.png" alt="DracoMX" height="42" width="42">-->
