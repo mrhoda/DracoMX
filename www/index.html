@@ -21,7 +21,7 @@
 
   	  <script>
   	      //localStorage["SessionID"] = "";
-  	      var SiteUrl = "http://localhost:8888";
+  	      localStorage['SiteUrl'] = "http://localhost:8888";
 
   	      $(document).bind("mobileinit", function () {
   	  				alert("mobileinit");
@@ -34,7 +34,7 @@
   				    $.mobile.useFastClick = false;
   				    localStorage['manuallogin'] == 'true';
   				    localStorage["SessionID"] == '';
-  				    SiteUrl = "http://www.dracomx.co.za";
+  				    localStorage['SiteUrl'] = "http://www.dracomx.co.za";
 	                    });
   	      
   	      //$.mobile.navigate('#home');
@@ -71,7 +71,7 @@
   	          }
   	          localStorage['manuallogin'] == 'true';
   	          localStorage["SessionID"] == '';
-  	          SiteUrl = "http://www.dracomx.co.za";
+  	          localStorage['SiteUrl'] = "http://www.dracomx.co.za";
   	      }
   	      function BodyOnLoad()
   	      {
@@ -89,7 +89,7 @@
   	      {
   	          SetSessionVariables();
 
-  	          var dracomx = new DracoMXClient(localStorage['SessionID'],SiteUrl);
+  	          var dracomx = new DracoMXClient(localStorage['SessionID'], localStorage['SiteUrl']);
 
   	          dracomx.createMessage('sysInboxList', '{"username" : "' + localStorage['username'] + '","channelid" : ' + localStorage['channelid'] + '}', function (jsonresult) {
   	              //jsonresult.result --> OK
@@ -123,7 +123,7 @@
   	      }
   	      function login()
   	      {
-  	          var dracomx = new DracoMXClient('',SiteUrl);
+  	          var dracomx = new DracoMXClient('', localStorage['SiteUrl']);
   	          //alert('login');
   	          var username = $('#username').val();
   	          var password = $('#password').val();
@@ -171,7 +171,7 @@
   	      {
   	          SetSessionVariables();
 
-  	          var dracomx = new DracoMXClient(localStorage['SessionID'],SiteUrl);
+  	          var dracomx = new DracoMXClient(localStorage['SessionID'], localStorage['SiteUrl']);
 
   	         
 
@@ -200,7 +200,7 @@
 
   	          SetSessionVariables();
 
-  	          var dracomx = new DracoMXClient(localStorage['SessionID'],SiteUrl);
+  	          var dracomx = new DracoMXClient(localStorage['SessionID'], localStorage['SiteUrl']);
   	          dracomx.createMessage('sysMessageAppList', '{"channelid" : "' + localStorage['channelid'] + '"}', function (jsonresult) {
   	              //jsonresult.result --> OK
   	              //jsonresult.msgname
@@ -224,7 +224,7 @@
   	            Params = '';
   	            //alert ('session id = ' + localStorage['SessionID']);
 
-  	            var dracomx = new DracoMXClient(localStorage['SessionID']);
+  	            var dracomx = new DracoMXClient(localStorage['SessionID'], localStorage['SiteUrl']);
   	            dracomx.createMessage(localStorage['MsgName'], Params, function (jsonresult) {
   	              //jsonresult.result --> OK
   	              //jsonresult.msgname
@@ -241,7 +241,7 @@
   	          SetSessionVariables();
   	          Params = '{"_msgsubject" : "' + MsgSubject + '"}';
   	     
-  	          var dracomx = new DracoMXClient(localStorage['SessionID'],SiteUrl);
+  	          var dracomx = new DracoMXClient(localStorage['SessionID'], localStorage['SiteUrl']);
   	          dracomx.createMessage(MsgName, Params, function (jsonresult) {
   	              //jsonresult.result --> OK
   	              //jsonresult.msgname
@@ -256,7 +256,7 @@
   	      }
   	      function OpenMsg(MsgName, MsgInstanceID, Params) {
               
-  	          var dracomx = new DracoMXClient(localStorage["SessionID"],SiteUrl);
+  	          var dracomx = new DracoMXClient(localStorage["SessionID"], localStorage['SiteUrl']);
   	          dracomx.openMessage(MsgName, MsgInstanceID, Params, function (jsonresult) {
   	              //jsonresult.result --> OK
   	              //jsonresult.msgname
@@ -279,7 +279,7 @@
         <script src="RIB/lib/jquery.mobile-1.1.0.js"></script>-->
        
 	<!-- DracoMX  -->
-        <script src="scripts/DracoMX-Client-0.1.1.NET.js"></script>
+        <script src="/scripts/DracoMX-Client-0.1.1.NET.js"></script>
 		<!--<script src="/DesignerUIManager.aspx?op=preview"></script>-->
 		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
 		<link rel="shortcut icon" href="/favicon.ico" />
@@ -298,7 +298,7 @@
              
             <div data-role="page" data-control-title="Home" id="home" data-theme="a">	
 			    <div data-role="header" data-position="fixed">
-				    <h6 id="dmxHeader">DracoMX v0.9</h6>
+				    <h6 id="dmxHeader">DracoMX v0.10</h6>
                     <a onclick="$('#dmxRightPanel').panel('open');" data-icon="bars" data-theme="a" class="ui-btn-right">...</a>
 				    <!--<input id="t1" name="t1" type="text" />-->
 				    <!--<img src="/images/draco6.png" alt="DracoMX" height="42" width="42">-->
