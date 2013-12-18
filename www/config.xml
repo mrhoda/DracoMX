@@ -58,6 +58,7 @@
         <gap:plugin name="Example" />
         A list of available plugins are available at https://build.phonegap.com/docs/plugins
     -->
+	<gap:plugin name="WebIntent" value="com.borismus.webintent.WebIntent" />
 
     <!-- Define app icon for each platform. -->
     <icon src="icon.png" />
