@@ -23,7 +23,7 @@
 
   	  <script>
   	      //localStorage["SessionID"] = "";
-  	      localStorage['SiteUrl'] = "http://localhost:8888";
+  	      localStorage['SiteUrl'] = "http://www.dracomx.co.za";
 
   	      $(document).bind("mobileinit", function () {
   	  				alert("mobileinit");
@@ -35,8 +35,7 @@
   				    $.mobile.page.prototype.options.addBackBtn = true;
   				    $.mobile.useFastClick = false;
   				    localStorage['manuallogin'] == 'true';
-  				    localStorage["SessionID"] == '';
-  				    localStorage['SiteUrl'] = "http://www.dracomx.co.za";
+  	
 	                    });
   	      
   	      //$.mobile.navigate('#home');
@@ -69,9 +68,7 @@
   	              localStorage['StartPoint'] = getElementValue('hfMsgPartIndex');
   	              localStorage['SessionID'] = getElementValue('hfSessionID');
   	              //alert('preview session id = ' + localStorage['SessionID']);
-  	              localStorage['SiteUrl'] = "http://www.dracomx.co.za";
-  	              localStorage["SessionID"] == '';
-  	              return;
+    	              return;
   	          }
     	          
   	         
